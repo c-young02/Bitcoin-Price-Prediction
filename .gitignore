@@ -1,0 +1,73 @@
+# Python-specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyz
+*.pyzw
+*.pyc/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Model files
+/models
+
+# Virtual environments
+venv/
+env/
+.venv/
+env.bak/
+*.env/
+
+# IDE-specific
+.idea/
+.vscode/
+
+# Compiled source
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Logs and databases
+*.log
+*.sqlite
+*.sqlite3
+*.log.*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Ignore local configuration files
+*.local
+*.ini
+
+# Build and data directories
+/build
+/data
+
+# Environment files
+.env
+
+
+# Node modules and Debug logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# Ignore package-lock.json to avoid conflicts
+package-lock.json
+
+# Ignore yarn lock file
+yarn.lock
