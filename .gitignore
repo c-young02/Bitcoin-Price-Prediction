@@ -10,8 +10,6 @@ __pycache__/
 # Jupyter Notebooks
 .ipynb_checkpoints/
 
-# Model files
-/models
 
 # Virtual environments
 venv/
