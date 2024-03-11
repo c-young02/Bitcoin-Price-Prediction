@@ -37,10 +37,11 @@ def preprocessing(df, time_step=30, future_step=14):
     df = scaler.fit_transform(np.array(df).reshape(-1, 1))
     joblib.dump(scaler, "./data/scaler.gz")
 
-    # Split the data into training and test sets
+    # Split the data into training, validation, and test sets
     training_size = int(len(df) * 0.60)
-    test_size = len(df) - training_size
-    train_data, test_data = df[0:training_size, :], df[training_size : len(df), :1]
+    validation_size = int(len(df) * 0.20)
+    test_size = len(df) - training_size - validation_size
+    train_data, val_data, test_data = df[0:training_size, :], df[training_size:training_size+validation_size, :], df[training_size+validation_size:len(df), :1]
 
     # Convert an array of values into a dataset matrix
     def create_dataset(dataset, time_step, future_step):
@@ -51,34 +52,43 @@ def preprocessing(df, time_step=30, future_step=14):
             datay.append(dataset[i + time_step + future_step - 1, 0])
         return np.array(datax), np.array(datay)
 
-    # Create datasets for training and test data
+    # Create datasets for training, validation, and test data
     x_train, y_train = create_dataset(train_data, time_step, future_step)
+    x_val, y_val = create_dataset(val_data, time_step, future_step)
     x_test, y_test = create_dataset(test_data, time_step, future_step)
+
     # Reshape input to be [samples, time steps, features] which is required for LSTM
     x_train = x_train.reshape(x_train.shape[0], x_train.shape[1], 1)
+    x_val = x_val.reshape(x_val.shape[0], x_val.shape[1], 1)
     x_test = x_test.reshape(x_test.shape[0], x_test.shape[1], 1)
 
-    return df, close_stock, x_train, y_train, x_test, y_test
+    return df, close_stock, x_train, y_train, x_val, y_val, x_test, y_test
 
 
-def transform(train_predict, test_predict, y_train, y_test):
+def transform(train_predict, val_predict, test_predict, y_train, y_val, y_test):
     """
     Transforms the predicted and original values back to their original scale.
 
     Args:
         train_predict: Predicted values for the training data.
+        val_predict: Predicted values for the validation data.
         test_predict: Predicted values for the test data.
         y_train: Original values for the training data.
+        y_val: Original values for the validation data.
         y_test: Original values for the test data.
 
     Returns:
         train_predict: Transformed predicted values for the training data.
+        val_predict: Transformed predicted values for the validation data.
         test_predict: Transformed predicted values for the test data.
         original_ytrain: Transformed original values for the training data.
+        original_yval: Transformed original values for the validation data.
         original_ytest: Transformed original values for the test data.
     """
     train_predict = scaler.inverse_transform(train_predict)
+    val_predict = scaler.inverse_transform(val_predict)
     test_predict = scaler.inverse_transform(test_predict)
     original_ytrain = scaler.inverse_transform(y_train.reshape(-1, 1))
+    original_yval = scaler.inverse_transform(y_val.reshape(-1, 1))
     original_ytest = scaler.inverse_transform(y_test.reshape(-1, 1))
-    return train_predict, test_predict, original_ytrain, original_ytest
+    return train_predict, val_predict, test_predict, original_ytrain, original_yval, original_ytest

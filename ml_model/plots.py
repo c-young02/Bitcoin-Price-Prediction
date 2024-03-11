@@ -62,13 +62,14 @@ def plot_loss(history):
     fig.show()
 
 
-def plot_predictions(df, train_predict, test_predict, close_stock, time_step):
+def plot_predictions(df, train_predict, val_predict, test_predict, close_stock, time_step):
     """
-    Function to plot the original close price, train predicted close price, and test predicted close price.
+    Function to plot the original close price, train predicted close price, validation predicted close price, and test predicted close price.
 
     Args:
         df: DataFrame containing the original data.
         train_predict: Array containing the train predicted data.
+        val_predict: Array containing the validation predicted data.
         test_predict: Array containing the test predicted data.
         close_stock: DataFrame containing the original 'Date' and 'Close' columns.
         time_step: The number of past days' data to consider for the prediction.
@@ -80,24 +81,27 @@ def plot_predictions(df, train_predict, test_predict, close_stock, time_step):
     trainPredictPlot[:, :] = np.nan
     trainPredictPlot[look_back : len(train_predict) + look_back, :] = train_predict
 
+    # Shift validation predictions for plotting
+    valPredictPlot = np.empty_like(df)
+    valPredictPlot[:, :] = np.nan
+    valPredictPlot[len(train_predict) + (look_back * 2): len(train_predict) + len(val_predict) + (look_back * 2),
+    :] = val_predict
+
     # Shift test predictions for plotting
     testPredictPlot = np.empty_like(df)
     testPredictPlot[:, :] = np.nan
-    testPredictPlot[
-        len(train_predict)
-        + (look_back * 2)
-        + 1 : len(train_predict)
-        + (look_back * 2)
-        + 1
-        + len(test_predict),
-        :,
-    ] = test_predict
+    start_index = len(train_predict) + len(val_predict) + (look_back * 3)
+    end_index = start_index + len(test_predict)
+
+    # Assign test predictions to the correct slice of testPredictPlot
+    testPredictPlot[start_index:end_index, :] = test_predict
 
     # Prepare data for plotting
     names = cycle(
         [
             "Original close price",
             "Train predicted close price",
+            "Validation predicted close price",
             "Test predicted close price",
         ]
     )
@@ -107,6 +111,7 @@ def plot_predictions(df, train_predict, test_predict, close_stock, time_step):
             "date": close_stock["Date"],
             "original_close": close_stock["Close"],
             "train_predicted_close": trainPredictPlot.reshape(1, -1)[0].tolist(),
+            "validation_predicted_close": valPredictPlot.reshape(1, -1)[0].tolist(),
             "test_predicted_close": testPredictPlot.reshape(1, -1)[0].tolist(),
         }
     )
@@ -118,6 +123,7 @@ def plot_predictions(df, train_predict, test_predict, close_stock, time_step):
         y=[
             plotdf["original_close"],
             plotdf["train_predicted_close"],
+            plotdf["validation_predicted_close"],
             plotdf["test_predicted_close"],
         ],
         labels={"value": "Stock price", "date": "Date"},

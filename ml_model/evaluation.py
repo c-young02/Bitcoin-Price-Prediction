@@ -32,13 +32,16 @@ def calculate_and_print_metrics(y_true, y_pred, data_type):
         print(f"{data_type} data {metric_name}: {metric_value}")
 
 
-def evaluate_model(train_predict, original_ytrain, test_predict, original_ytest):
+def evaluate_model(train_predict, original_ytrain, val_predict, original_yval, test_predict, original_ytest):
     """
     Function to evaluate the performance of the model using various metrics.
     :param train_predict: Predicted values for the training data
     :param original_ytrain: Original values for the training data
+    :param val_predict: Predicted values for the validation data
+    :param original_yval: Original values for the validation data
     :param test_predict: Predicted values for the test data
     :param original_ytest: Original values for the test data
     """
     calculate_and_print_metrics(original_ytrain, train_predict, "Train")
+    calculate_and_print_metrics(original_yval, val_predict, "Validation")
     calculate_and_print_metrics(original_ytest, test_predict, "Test")

@@ -13,7 +13,7 @@ path = "../models/model.h5"
 file_path = os.path.join(model_dir, path)
 
 # Load the pre-trained model from the file
-model = load_model(file_path, custom_objects={'root_mean_squared_error': root_mean_squared_error})
+model = load_model(file_path)
 
 # Fetch the Bitcoin data
 bitcoin_data = fetch_data()

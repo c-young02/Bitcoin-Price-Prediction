@@ -11,7 +11,7 @@ def root_mean_squared_error(y_true, y_pred):
     return K.sqrt(K.mean(K.square(y_pred - y_true)))
 
 
-def create_model(units=10, activation="relu"):
+def create_model(units=50, activation="relu"):
     """
     Function to create a Sequential model with LSTM and Dense layers.
 
@@ -23,9 +23,9 @@ def create_model(units=10, activation="relu"):
         model: Compiled Sequential model
     """
     model = Sequential()
-    model.add(LSTM(units, input_shape=(None, 1), activation=activation))
+    model.add(LSTM(units, input_shape=(60, 1), activation=activation))
     model.add(Dense(1))
-    model.compile(loss="mean_squared_error", optimizer="adam", metrics=[root_mean_squared_error])
+    model.compile(loss="mean_squared_error", optimizer="adam", metrics=['mae'])
     return model
 
 
@@ -45,8 +45,8 @@ def train_model(model, x_train, y_train, x_test, y_test, epochs=200, batch_size=
     Returns:
         history: History object containing training history
     """
-    early_stopping = EarlyStopping(monitor='val_root_mean_squared_error', patience=10)
-    model_checkpoint = ModelCheckpoint('../models/model.h5', monitor='val_root_mean_squared_error', save_best_only=True)
+    early_stopping = EarlyStopping(monitor='val_mae', patience=10)
+    model_checkpoint = ModelCheckpoint('../models/model.h5', monitor='val_mae', save_best_only=True)
 
     history = model.fit(
         x_train,

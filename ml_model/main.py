@@ -25,7 +25,7 @@ def main():
     plot_close(df)
 
     # Preprocess the data
-    df, close_stock, x_train, y_train, x_test, y_test = preprocessing(
+    df, close_stock, x_train, y_train, x_val, y_val, x_test, y_test = preprocessing(
         df, time_step, future_step
     )
 
@@ -34,26 +34,27 @@ def main():
 
     # Train the model
     history = train_model(
-        model, x_train, y_train, x_test, y_test, epochs=epochs, batch_size=32
+            model, x_train, y_train, x_val, y_val, epochs=epochs, batch_size=32
     )
 
     # Plot the training and validation loss
     plot_loss(history)
 
-    # Predict the training and testing data
+    # Predict the training, validation and testing data
     train_predict = model.predict(x_train)
+    val_predict = model.predict(x_val)
     test_predict = model.predict(x_test)
 
     # Transform the predicted data back to its original form
-    train_predict, test_predict, original_ytrain, original_ytest = transform(
-        train_predict, test_predict, y_train, y_test
+    train_predict, val_predict, test_predict, original_ytrain, original_yval, original_ytest = transform(
+        train_predict, val_predict, test_predict, y_train, y_val, y_test
     )
 
     # Evaluate the model
-    evaluate_model(train_predict, original_ytrain, test_predict, original_ytest)
+    evaluate_model(train_predict, original_ytrain, val_predict, original_yval, test_predict, original_ytest)
 
     # Plot the predictions
-    plot_predictions(df, train_predict, test_predict, close_stock, time_step)
+    plot_predictions(df, train_predict, val_predict, test_predict, close_stock, time_step)
 
 
 if __name__ == "__main__":
