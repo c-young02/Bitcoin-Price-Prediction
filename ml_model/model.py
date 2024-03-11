@@ -1,6 +1,14 @@
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras import backend as K
+
+
+def root_mean_squared_error(y_true, y_pred):
+    """
+    Custom metric for root mean squared error (RMSE)
+    """
+    return K.sqrt(K.mean(K.square(y_pred - y_true)))
 
 
 def create_model(units=10, activation="relu"):
@@ -17,7 +25,7 @@ def create_model(units=10, activation="relu"):
     model = Sequential()
     model.add(LSTM(units, input_shape=(None, 1), activation=activation))
     model.add(Dense(1))
-    model.compile(loss="mean_squared_error", optimizer="adam")
+    model.compile(loss="mean_squared_error", optimizer="adam", metrics=[root_mean_squared_error])
     return model
 
 
@@ -37,8 +45,8 @@ def train_model(model, x_train, y_train, x_test, y_test, epochs=200, batch_size=
     Returns:
         history: History object containing training history
     """
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10)
-    model_checkpoint = ModelCheckpoint('../models/model.h5', monitor='val_loss', save_best_only=True)
+    early_stopping = EarlyStopping(monitor='val_root_mean_squared_error', patience=10)
+    model_checkpoint = ModelCheckpoint('../models/model.h5', monitor='val_root_mean_squared_error', save_best_only=True)
 
     history = model.fit(
         x_train,

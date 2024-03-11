@@ -13,7 +13,7 @@ def main():
     epochs = 200
 
     # Define the number of past days' data to consider for the prediction
-    time_step = 30
+    time_step = 60
 
     # Define the number of future days to predict
     future_step = 14
