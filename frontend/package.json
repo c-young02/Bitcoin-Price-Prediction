@@ -10,6 +10,7 @@
     "axios": "^1.6.7",
     "lightweight-charts": "^4.1.3",
     "react": "^18.2.0",
+    "react-d3-speedometer": "^2.2.1",
     "react-dom": "^18.2.0",
     "react-moment": "^1.1.3",
     "react-native-gesture-handler": "^2.15.0",
