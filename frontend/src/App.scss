@@ -1,0 +1,23 @@
+.App{
+    // width: 100vw;
+    min-height: 100vh;
+}
+
+.bottom-section{
+    // min-height: 100vh;
+}
+
+// overwrite theme variables
+
+//quich test
+$bg-primary: #1E1E1E;
+$bg-secondary: #23395B;
+
+$theme-colors: (
+  'pri': #1E1E1E,
+  'sec': #23395B,
+  'ter': #8EA8C3,
+);
+
+/* The following line can be included in a src/App.scss */
+@import '~bootstrap/scss/bootstrap';

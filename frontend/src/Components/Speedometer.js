@@ -1,6 +1,7 @@
-import ReactSpeedometer from "react-d3-speedometer"
-import { useEffect, useState } from "react"
-import Axios from "axios"
+import ReactSpeedometer from "react-d3-speedometer";
+import { useEffect, useState } from "react";
+import Axios from "axios";
+import '../config.js';
 
 
 export default function Speedometer(){
@@ -11,7 +12,7 @@ export default function Speedometer(){
 
         Axios({
             method: "get",
-            url: "http://127.0.0.1:5000/FearandGreed",
+            url: `http://${global.config.localhost}:5000/FearandGreed`,
 
         }).then((res) => {
 
@@ -25,24 +26,6 @@ export default function Speedometer(){
         }); 
 
     }, [])
-
-
-
-
-    // const mapData = (data) => {
-
-    //     if (initialData.length === 0){
-    //         data.forEach(data => {
-
-    //             priceArray.push(data.close);
-    //             timeArray.push(moment.unix(`${data.time}`).format("YYYY-MM-DD"));
-    //             initialData.push({time: moment.unix(`${data.time}`).format("YYYY-MM-DD"), value: data.close});
-              
-    //         });
-    //     }
-    // }
-
-
 
     return (
         <div style={{
