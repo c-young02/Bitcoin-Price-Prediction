@@ -52,19 +52,24 @@ def cryptoInfo():
                 'Accept': 'application/json'
             }
     
-    r = requests.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?&limit=1&convert=USD", headers=headers)
+    r = requests.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?&limit=1&convert=GBP", headers=headers)
     
     r = r.json()
+
+    # Fetch the current USD to GBP exchange rate
+    response = requests.get('https://api.exchangerate-api.com/v4/latest/USD')
+    data = response.json()
+    usd_to_gbp = data['rates']['GBP']
     
     cmc_rank = r['data'][0]['cmc_rank']
-    current_price = round(r['data'][0]['quote']['USD']['price'], 2)
+    current_price = round(r['data'][0]['quote']['GBP']['price'], 2)
     
-    market_cap = r['data'][0]['quote']['USD']['market_cap']
+    market_cap = r['data'][0]['quote']['GBP']['market_cap']
     formatted_num = "{:,.2f}".format(market_cap)
     market_capList = formatted_num.split(',')
     market_cap = market_capList[0] + ',' + market_capList[1]
     
-    market_dominance = round(r['data'][0]['quote']['USD']['market_cap_dominance'], 2)
+    market_dominance = round(r['data'][0]['quote']['GBP']['market_cap_dominance'], 2)
     market_dominance = str(market_dominance)+ '%'
     
     crypto_name = r['data'][0]['slug']
@@ -75,9 +80,10 @@ def cryptoInfo():
     circulating_supply = circulating_supplyList[0]
     # Call the function to predict the bitcoin price
     predicted_price = predict_bitcoin_price()
+    predicted_price_value_gbp = predicted_price * usd_to_gbp
 
     # Get the value from the numpy array and round it to 2 decimal places
-    predicted_price_value = np.round(predicted_price.item(), 2)
+    predicted_price_value = np.round(predicted_price_value_gbp.item(), 2)
     
     print(cmc_rank)
     print(current_price)
@@ -88,12 +94,12 @@ def cryptoInfo():
     
     response = jsonify({
         'rank': cmc_rank,
-        'current_price': '$' + str(current_price),
+        'current_price': '£' + str(current_price),
         'market_cap': market_cap,
         'market_dominance': market_dominance,
         'crypto_name': crypto_name,
         'circulating_supply': str(circulating_supply) + 'M',
-        'predicted_price': '$' + str(predicted_price_value)
+        'predicted_price': '£' + str(predicted_price_value)
     })
     
     response.headers.add('Access-Control-Allow-Origin', '*')

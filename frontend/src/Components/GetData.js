@@ -19,7 +19,7 @@ function GetData() {
 			url: `https://min-api.cryptocompare.com/data/v2/histoday?`,
 			params: {
 				fsym: 'BTC',
-				tsym: 'USD',
+				tsym: 'GBP',
 				limit: 1500,
 			},
 		})
