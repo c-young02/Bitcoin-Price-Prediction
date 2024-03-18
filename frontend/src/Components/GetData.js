@@ -1,4 +1,4 @@
-import {useRef, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import Axios from 'axios';
 import moment from 'moment'; 
 import BitcoinChart from './BitcoinChart';
@@ -18,7 +18,7 @@ function GetData() {
 
         Axios({
             method: "get",
-            url: "https://min-api.cryptocompare.com/data/v2/histoday?",
+            url: `https://min-api.cryptocompare.com/data/v2/histoday?`,
             params: {
                 fsym: "BTC",
                 tsym: "GBP",
@@ -43,26 +43,18 @@ function GetData() {
 
 
     const mapData = (data) => {
-        // console.log(data[0])
         if (initialData.length === 0){
             data.forEach(data => {
-                // console.log(data.time);
                 priceArray.push(data.close);
                 timeArray.push(moment.unix(`${data.time}`).format("YYYY-MM-DD"));
                 initialData.push({time: moment.unix(`${data.time}`).format("YYYY-MM-DD"), value: data.close});
-                // setBitcoinData({time: moment.unix(`${data.time}`).format("YYYY-MM-DD"), value: data.close});
             });
         }
-
-        // setBitcoinData(initialData);
-
-
     }
 
 
     return (
-        <div>
-            {/* {console.log(bitcoinData)} */}
+        <div className=''>
             <BitcoinChart ChartData={bitcoinData} />
         </div>
     );
