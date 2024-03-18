@@ -1,27 +1,33 @@
 from tensorflow.keras.models import load_model
-from ml_model.model import root_mean_squared_error
 from predict import predict_price, predict_price_plot
 import os
 from fetch_bitcoin_data import fetch_data
 
-# Get the directory where the current script is located
-model_dir = os.path.dirname(os.path.realpath(__file__))
-# Define the relative path to the saved model
-path = "../models/model.h5"
 
-# Construct the absolute path to the saved model
-file_path = os.path.join(model_dir, path)
+def predict_bitcoin_price():
+    try:
+        # Get the directory where the current script is located
+        model_dir = os.path.dirname(os.path.realpath(__file__))
+        # Define the relative path to the saved model
+        path = "../models/model.h5"
 
-# Load the pre-trained model from the file
-model = load_model(file_path)
+        # Construct the absolute path to the saved model
+        file_path = os.path.join(model_dir, path)
 
-# Fetch the Bitcoin data
-bitcoin_data = fetch_data()
+        # Load the pre-trained model from the file
+        model = load_model(file_path)
 
-# Use the loaded model to predict the price 14 days into the future using the fetched Bitcoin data
-predicted_price = predict_price(model, bitcoin_data)
+        # Fetch the Bitcoin data
+        bitcoin_data = fetch_data()
 
-# Print the predicted price
-print("The predicted price 14 days into the future is: ", predicted_price)
+        # Use the loaded model to predict the price 14 days into the future using the fetched Bitcoin data
+        predicted_price = predict_price(model, bitcoin_data)
 
-predict_price_plot(predicted_price, bitcoin_data)
+        # Print the predicted price
+        print("The predicted price 14 days into the future is: ", predicted_price)
+
+        # Return the predicted price and the fetched Bitcoin data
+        return predicted_price
+    except Exception as e:
+        print(f"Error in predict_bitcoin_price: {e}")
+        return None

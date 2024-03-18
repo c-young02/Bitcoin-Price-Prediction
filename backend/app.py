@@ -1,11 +1,27 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 import requests
+import os
+import sys
+import numpy as np
+
+# Get the current directory
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Get the parent directory
+parent_dir = os.path.dirname(current_dir)
+
+# Append the ml_model directory to the parent directory
+sys.path.append(os.path.join(parent_dir, 'ml_model'))
+
+from run import predict_bitcoin_price
 
 app = Flask(__name__)
+
 
 @app.route('/')
 def hello_world():
     return 'Backend is working!'
+
 
 @app.route('/FearandGreed', methods=['GET'])
 def fear_and_greed():
@@ -36,20 +52,19 @@ def cryptoInfo():
                 'Accept': 'application/json'
             }
     
-    r = requests.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?&limit=1&convert=GBP", headers=headers)
+    r = requests.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?&limit=1&convert=USD", headers=headers)
     
     r = r.json()
     
     cmc_rank = r['data'][0]['cmc_rank']
-    current_price = round(r['data'][0]['quote']['GBP']['price'], 2)
-    predicted_price = 0
+    current_price = round(r['data'][0]['quote']['USD']['price'], 2)
     
-    market_cap = r['data'][0]['quote']['GBP']['market_cap']
+    market_cap = r['data'][0]['quote']['USD']['market_cap']
     formatted_num = "{:,.2f}".format(market_cap)
     market_capList = formatted_num.split(',')
     market_cap = market_capList[0] + ',' + market_capList[1]
     
-    market_dominance = round(r['data'][0]['quote']['GBP']['market_cap_dominance'], 2)
+    market_dominance = round(r['data'][0]['quote']['USD']['market_cap_dominance'], 2)
     market_dominance = str(market_dominance)+ '%'
     
     crypto_name = r['data'][0]['slug']
@@ -58,6 +73,11 @@ def cryptoInfo():
     formatted_supply = "{:,}".format(circulating_supply)
     circulating_supplyList = formatted_supply.split(',')
     circulating_supply = circulating_supplyList[0]
+    # Call the function to predict the bitcoin price
+    predicted_price = predict_bitcoin_price()
+
+    # Get the value from the numpy array and round it to 2 decimal places
+    predicted_price_value = np.round(predicted_price.item(), 2)
     
     print(cmc_rank)
     print(current_price)
@@ -68,15 +88,17 @@ def cryptoInfo():
     
     response = jsonify({
         'rank': cmc_rank,
-        'current_price': current_price,
+        'current_price': '$' + str(current_price),
         'market_cap': market_cap,
         'market_dominance': market_dominance,
         'crypto_name': crypto_name,
-        'circulating_supply': circulating_supply
-        })
+        'circulating_supply': str(circulating_supply) + 'M',
+        'predicted_price': '$' + str(predicted_price_value)
+    })
     
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
 
 if __name__ == '__main__':
     app.run(debug=True)

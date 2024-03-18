@@ -1,9 +1,16 @@
-import joblib
 import numpy as np
 import plotly.graph_objects as go
+import os
+import joblib
+
+# Get the directory where the current script is located
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Define the absolute path to the scaler.gz file
+scaler_path = os.path.join(current_dir, "data", "scaler.gz")
 
 # Load the scaler from the saved file
-scaler = joblib.load("./data/scaler.gz")
+scaler = joblib.load(scaler_path)
 
 
 def predict_price(model, bitcoin_data):
