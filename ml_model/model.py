@@ -29,7 +29,7 @@ def create_model(units=50, activation="relu"):
     return model
 
 
-def train_model(model, x_train, y_train, x_test, y_test, epochs=200, batch_size=32):
+def train_model(model, x_train, y_train, x_test, y_test, future_step, epochs=200, batch_size=32):
     """
     Function to train the model with the given training and test data.
 
@@ -39,6 +39,7 @@ def train_model(model, x_train, y_train, x_test, y_test, epochs=200, batch_size=
         y_train: Training data labels
         x_test: Test data features
         y_test: Test data labels
+        future_step (int): The number of future days to predict
         epochs (int): Number of epochs to train for
         batch_size (int): Batch size for training
 
@@ -46,7 +47,7 @@ def train_model(model, x_train, y_train, x_test, y_test, epochs=200, batch_size=
         history: History object containing training history
     """
     early_stopping = EarlyStopping(monitor='val_mae', patience=10)
-    model_checkpoint = ModelCheckpoint('../models/model.h5', monitor='val_mae', save_best_only=True)
+    model_checkpoint = ModelCheckpoint(f'../models/model_{future_step}.h5', monitor='val_mae', save_best_only=True)
 
     history = model.fit(
         x_train,

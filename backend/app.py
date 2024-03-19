@@ -78,12 +78,17 @@ def cryptoInfo():
     formatted_supply = "{:,}".format(circulating_supply)
     circulating_supplyList = formatted_supply.split(',')
     circulating_supply = circulating_supplyList[0]
-    # Call the function to predict the bitcoin price
-    predicted_price = predict_bitcoin_price()
-    predicted_price_value_gbp = predicted_price * usd_to_gbp
+    # Define an array of model paths
+    model_paths = ["../models/model_1.h5", "../models/model_7.h5", "../models/model_14.h5"]
 
-    # Get the value from the numpy array and round it to 2 decimal places
-    predicted_price_value = np.round(predicted_price_value_gbp.item(), 2)
+    # Call the function to predict the bitcoin price
+    predicted_prices = predict_bitcoin_price(model_paths)
+
+    # Convert the predicted prices to GBP
+    predicted_prices_gbp = [price * usd_to_gbp for price in predicted_prices]
+
+    # Round the predicted prices to 2 decimal places
+    predicted_prices_value = [np.round(price.item(), 2) for price in predicted_prices_gbp]
     
     print(cmc_rank)
     print(current_price)
@@ -91,7 +96,8 @@ def cryptoInfo():
     print(market_dominance)
     print(crypto_name)
     print(circulating_supply)
-    
+    print(predicted_prices_value)
+
     response = jsonify({
         'rank': cmc_rank,
         'current_price': '£' + str(current_price),
@@ -99,7 +105,7 @@ def cryptoInfo():
         'market_dominance': market_dominance,
         'crypto_name': crypto_name,
         'circulating_supply': str(circulating_supply) + 'M',
-        'predicted_price': '£' + str(predicted_price_value)
+        'predicted_prices': ['£' + str(price) for price in predicted_prices_value]
     })
     
     response.headers.add('Access-Control-Allow-Origin', '*')

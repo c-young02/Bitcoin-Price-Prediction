@@ -16,7 +16,7 @@ def main():
     time_step = 60
 
     # Define the number of future days to predict
-    future_step = 14
+    future_step = 7
 
     # Load the data from the CSV file
     df = load_data(dataset)
@@ -34,7 +34,7 @@ def main():
 
     # Train the model
     history = train_model(
-            model, x_train, y_train, x_val, y_val, epochs=epochs, batch_size=32
+        model, x_train, y_train, x_val, y_val, future_step, epochs=epochs, batch_size=32
     )
 
     # Plot the training and validation loss
