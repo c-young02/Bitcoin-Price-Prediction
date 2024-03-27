@@ -24,8 +24,6 @@ def calculate_and_print_metrics(y_true, y_pred, data_type):
         "MAE": mean_absolute_error(y_true, y_pred),
         "Explained Variance Regression Score": explained_variance_score(y_true, y_pred),
         "R2 Score": r2_score(y_true, y_pred),
-        "Mean Gamma Deviance": mean_gamma_deviance(y_true, y_pred),
-        "Mean Poisson Deviance": mean_poisson_deviance(y_true, y_pred),
     }
 
     for metric_name, metric_value in metrics.items():
