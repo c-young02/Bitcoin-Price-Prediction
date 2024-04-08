@@ -30,7 +30,7 @@ def predict_price(model, bitcoin_data):
     # Reshape the data into the required shape for the model
     bitcoin_data_scaled = np.reshape(bitcoin_data_scaled, (1, 60, 1))
 
-    # Use the model to predict the price 14 days into the future
+    # Use the model to predict the price X days into the future
     predicted_price = model.predict(bitcoin_data_scaled)
 
     # Inverse transform the predicted price to get it back to the original scale

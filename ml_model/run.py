@@ -23,7 +23,7 @@ def predict_bitcoin_price(model_paths):
             # Load the pre-trained model from the file
             model = load_model(file_path)
 
-            # Use the loaded model to predict the price 14 days into the future using the fetched Bitcoin data
+            # Use the loaded model to predict the price X days into the future using the fetched Bitcoin data
             predicted_price = predict_price(model, bitcoin_data)
 
             # Append the predicted price to the list

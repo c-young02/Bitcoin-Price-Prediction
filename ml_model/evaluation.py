@@ -4,8 +4,6 @@ from sklearn.metrics import (
     mean_absolute_error,
     explained_variance_score,
     r2_score,
-    mean_gamma_deviance,
-    mean_poisson_deviance,
 )
 
 
