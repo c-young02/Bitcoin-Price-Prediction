@@ -35,7 +35,8 @@ export default function Speedometer(){
             <ReactSpeedometer
                 fluidWidth={true}
                 value={currentValue * 10}
-                currentValueText="Happiness Level"
+                currentValueText="Fear or Greed"
+                textColor="white"
                 customSegmentLabels={[
                 {
                     text: "Extreme Fear",
