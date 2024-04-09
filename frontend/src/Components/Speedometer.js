@@ -28,9 +28,9 @@ export default function Speedometer(){
     }, [])
 
     return (
-        <div style={{
-            width: "500px",
-            height: "300px"}}
+        <div className="container-fluid align-items-center justify-content-center"
+        style={{ width: "500px",
+                height: "500px "}}      
             >
             <ReactSpeedometer
                 fluidWidth={true}
