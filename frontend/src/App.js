@@ -13,14 +13,14 @@ function App() {
       <div>
         <Navigation />
       </div>
-      <div className='mx-4'>
+      <div className='px-4'>
         <GetData />
       </div>
-      <div className='bottom-section bg-sec d-flex flex-row border-top border-white'>
-        <div className='container-fluid align-items-center justify-content-center w-50 border border-white'>
+      <div className='bottom-section bg-sec d-flex flex-column flex-md-row border-top border-white'>
+        <div className='w-100 border border-white py-3'>
           <Speedometer />
         </div>
-        <div className='container-fluid w-50 border border-white p-0'>
+        <div className='container-fluid w-100 border border-white p-0'>
           <CryptoInfo />
         </div>
       </div>

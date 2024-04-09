@@ -8,7 +8,7 @@ export default function Navigation(){
         <Navbar expand="lg" className="bg-sec p-3 border-bottom border-white ">
           <Container className='justify-content-center '>
             <Navbar.Brand href="#home" className='text-white fw-bold text-center'>Fintellitech</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
           </Container>
         </Navbar>
     );

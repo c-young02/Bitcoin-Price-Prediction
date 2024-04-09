@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import moment from 'moment';
 import BitcoinChart from './BitcoinChart';
@@ -8,10 +8,9 @@ function GetData() {
 	var priceArray = [];
 
 	const [bitcoinData, setBitcoinData] = useState([]);
+	const [isCandleGraph, setIsCandleGraph] = useState(true);
 
 	var initialData = [];
-
-	var data = [];
 
 	useEffect(() => {
 		Axios({
@@ -24,11 +23,8 @@ function GetData() {
 			},
 		})
 			.then((res) => {
-				data = res.data.Data.Data;
+				const data = res.data.Data.Data;
 				mapData(data);
-
-				console.log(initialData);
-
 				setBitcoinData(initialData);
 			})
 			.catch((err) => {
@@ -38,12 +34,13 @@ function GetData() {
 
 	const mapData = (data) => {
 		if (initialData.length === 0) {
-			data.forEach((data) => {
-				priceArray.push(data.close);
-				timeArray.push(moment.unix(`${data.time}`).format('YYYY-MM-DD'));
+			data.forEach((item) => {
 				initialData.push({
-					time: moment.unix(`${data.time}`).format('YYYY-MM-DD'),
-					value: data.close,
+					time: moment.unix(`${item.time}`).format('YYYY-MM-DD'),
+					open: item.open,
+					high: item.high,
+					low: item.low,
+					close: item.close,
 				});
 			});
 		}
@@ -51,7 +48,7 @@ function GetData() {
 
 	return (
 		<div className="">
-			<BitcoinChart ChartData={bitcoinData} />
+			<BitcoinChart chartData={bitcoinData} isCandleGraph={isCandleGraph} />
 		</div>
 	);
 }
