@@ -2,16 +2,21 @@ import { useEffect, useState } from 'react';
 import Axios from 'axios';
 import moment from 'moment';
 import BitcoinChart from './BitcoinChart';
+import CandleStick from './CandleStick';
 
-function GetData() {
-	var timeArray = [];
-	var priceArray = [];
+function GetData(isLineGraph) {
 
-	const [bitcoinData, setBitcoinData] = useState([]);
+	const [lineData, setLineData] = useState([]);
+	const [candleData, setCandleData] = useState([]);
+	// const [showLineGraph, setShowLineGraph] = useState(isLineGraph);
 
-	var initialData = [];
+
+	var initialLineData = [];
+	var initialCandleData = [];
 
 	var data = [];
+
+	// setShowLineGraph(isLineGraph);
 
 	useEffect(() => {
 		Axios({
@@ -27,23 +32,34 @@ function GetData() {
 				data = res.data.Data.Data;
 				mapData(data);
 
-				console.log(initialData);
-
-				setBitcoinData(initialData);
+				setLineData(initialLineData);
+				setCandleData(initialCandleData);
 			})
 			.catch((err) => {
 				console.log('Error: ' + err);
 			});
-	}, [setBitcoinData]);
+	}, [setLineData]);
 
 	const mapData = (data) => {
-		if (initialData.length === 0) {
+		if (initialLineData.length === 0) {
 			data.forEach((data) => {
-				priceArray.push(data.close);
-				timeArray.push(moment.unix(`${data.time}`).format('YYYY-MM-DD'));
-				initialData.push({
+				initialLineData.push({
 					time: moment.unix(`${data.time}`).format('YYYY-MM-DD'),
-					value: data.close,
+					value: data.close
+
+				});
+			});
+		}
+
+		if (initialCandleData.length === 0) {
+			data.forEach((data) => {
+				initialCandleData.push({
+					time: moment.unix(`${data.time}`).format('YYYY-MM-DD'),
+					open: data.open,
+					close: data.close,
+					low: data.low,
+					high: data.high
+
 				});
 			});
 		}
@@ -51,7 +67,11 @@ function GetData() {
 
 	return (
 		<div className="">
-			<BitcoinChart ChartData={bitcoinData} />
+			{isLineGraph.isLineGraph === true ?
+			<BitcoinChart LineData={lineData} /> :
+			<CandleStick CandleData={candleData} />
+			}
+			{/* {console.log(isLineGraph.isLineGraph)} */}
 		</div>
 	);
 }
