@@ -5,18 +5,13 @@ import BitcoinChart from './BitcoinChart';
 import CandleStick from './CandleStick';
 
 function GetData(isLineGraph) {
-
 	const [lineData, setLineData] = useState([]);
 	const [candleData, setCandleData] = useState([]);
-	// const [showLineGraph, setShowLineGraph] = useState(isLineGraph);
-
 
 	var initialLineData = [];
 	var initialCandleData = [];
 
 	var data = [];
-
-	// setShowLineGraph(isLineGraph);
 
 	useEffect(() => {
 		Axios({
@@ -45,8 +40,7 @@ function GetData(isLineGraph) {
 			data.forEach((data) => {
 				initialLineData.push({
 					time: moment.unix(`${data.time}`).format('YYYY-MM-DD'),
-					value: data.close
-
+					value: data.close,
 				});
 			});
 		}
@@ -58,8 +52,7 @@ function GetData(isLineGraph) {
 					open: data.open,
 					close: data.close,
 					low: data.low,
-					high: data.high
-
+					high: data.high,
 				});
 			});
 		}
@@ -67,11 +60,11 @@ function GetData(isLineGraph) {
 
 	return (
 		<div className="">
-			{isLineGraph.isLineGraph === true ?
-			<BitcoinChart LineData={lineData} /> :
-			<CandleStick CandleData={candleData} />
-			}
-			{/* {console.log(isLineGraph.isLineGraph)} */}
+			{isLineGraph.isLineGraph === true ? (
+				<BitcoinChart LineData={lineData} />
+			) : (
+				<CandleStick CandleData={candleData} />
+			)}
 		</div>
 	);
 }

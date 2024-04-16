@@ -1,10 +1,25 @@
 .App{
-    // width: 100vw;
-    min-height: 100vh;
+  // width: 100vw;
+  min-height: 100vh;
 }
 
 .bottom-section{
-    // min-height: 100vh;
+  // min-height: 100vh;
+}
+
+#button {
+background-color: #23395B;
+border: 2px solid white;
+border-radius: 5px;
+color: white;
+padding-left: 1rem;
+padding-right: 1rem;
+}
+#button:hover{
+-webkit-filter: brightness(90%);
+-moz-transition: all 1s ease;
+-o-transition: all 1s ease;
+-ms-transition: all 1s ease;
 }
 
 #button {
@@ -29,9 +44,9 @@ $bg-primary: #1E1E1E;
 $bg-secondary: #23395B;
 
 $theme-colors: (
-  'pri': #1E1E1E,
-  'sec': #23395B,
-  'ter': #8EA8C3,
+'pri': #1E1E1E,
+'sec': #23395B,
+'ter': #8EA8C3,
 );
 
 /* The following line can be included in a src/App.scss */
