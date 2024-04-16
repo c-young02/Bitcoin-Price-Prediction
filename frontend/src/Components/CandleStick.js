@@ -1,11 +1,11 @@
 import { useRef, useEffect, useState } from 'react';
 import { ColorType, createChart } from 'lightweight-charts';
 
-function BitcoinChart(LineData) {
+function CandleStick(CandleData) {
 	const chartContainerRef = useRef();
 
 	useEffect(() => {
-		var d = LineData;
+		var d = CandleData;
 
 		const chart = createChart(chartContainerRef.current, {
 			layout: {
@@ -35,14 +35,15 @@ function BitcoinChart(LineData) {
 				borderColor: '#8EA8C3',
 			},
 
-			width: chartContainerRef.current.clientWidth,
 			height: 500,
 		});
 
-		const newSeries = chart.addAreaSeries({
-			lineColor: '#2962FF',
-			topColor: '#2962FF',
-			bottomColor: 'rgba(41, 98, 255, 0.28)',
+		const candlestickSeries = chart.addCandlestickSeries({
+			upColor: '#26a69a',
+			downColor: '#ef5350',
+			borderVisible: false,
+			wickUpColor: '#26a69a',
+			wickDownColor: '#ef5350',
 		});
 
 		const handleResize = () => {
@@ -53,13 +54,14 @@ function BitcoinChart(LineData) {
 
 		window.addEventListener('resize', handleResize);
 
-		if (LineData.LineData !== undefined) newSeries.setData(LineData.LineData);
+		if (CandleData.CandleData !== undefined)
+			candlestickSeries.setData(CandleData.CandleData);
 
 		return () => {
 			chart.remove();
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [LineData]);
+	}, [CandleData]);
 
 	return (
 		<div className="mt-3">
@@ -68,4 +70,4 @@ function BitcoinChart(LineData) {
 	);
 }
 
-export default BitcoinChart;
+export default CandleStick;

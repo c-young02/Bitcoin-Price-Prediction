@@ -12,7 +12,6 @@ export default function Speedometer() {
 			url: `http://${global.config.localhost}:5000/FearandGreed`,
 		})
 			.then((res) => {
-				console.log(res.data);
 				setCurrentValue(res.data);
 			})
 			.catch((err) => {
@@ -22,13 +21,7 @@ export default function Speedometer() {
 
 	return (
 		<>
-			<div
-				//   style={{
-				//     width: "500px",
-				//     height: "300px",
-				//   }}
-				className="speedometerContainer"
-			>
+			<div className="speedometerContainer">
 				<ReactSpeedometer
 					fluidWidth={true}
 					value={currentValue * 10}
@@ -63,8 +56,6 @@ export default function Speedometer() {
 						},
 					]}
 				/>
-
-				{console.log('this is the current value ' + currentValue)}
 			</div>
 		</>
 	);

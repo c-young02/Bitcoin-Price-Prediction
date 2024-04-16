@@ -26,7 +26,6 @@ export default function CryptoInfo() {
 
 	return (
 		<div className="w-100">
-			{console.log(cryptoInfo.circulating_supply)}
 			<div className="border-bottom border-white p-1">
 				<h3 className="text-white text-center">Bitcoin</h3>
 			</div>

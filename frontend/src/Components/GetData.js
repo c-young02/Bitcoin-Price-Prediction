@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Axios from 'axios';
 import moment from 'moment';
 import BitcoinChart from './BitcoinChart';
+import CandleStick from './CandleStick';
 
-function GetData() {
-	var timeArray = [];
-	var priceArray = [];
+function GetData(isLineGraph) {
+	const [lineData, setLineData] = useState([]);
+	const [candleData, setCandleData] = useState([]);
 
-	const [bitcoinData, setBitcoinData] = useState([]);
-	const [isCandleGraph, setIsCandleGraph] = useState(true);
+	var initialLineData = [];
+	var initialCandleData = [];
 
-	var initialData = [];
+	var data = [];
 
 	useEffect(() => {
 		Axios({
@@ -23,24 +24,35 @@ function GetData() {
 			},
 		})
 			.then((res) => {
-				const data = res.data.Data.Data;
+				data = res.data.Data.Data;
 				mapData(data);
-				setBitcoinData(initialData);
+
+				setLineData(initialLineData);
+				setCandleData(initialCandleData);
 			})
 			.catch((err) => {
 				console.log('Error: ' + err);
 			});
-	}, [setBitcoinData]);
+	}, [setLineData]);
 
 	const mapData = (data) => {
-		if (initialData.length === 0) {
-			data.forEach((item) => {
-				initialData.push({
-					time: moment.unix(`${item.time}`).format('YYYY-MM-DD'),
-					open: item.open,
-					high: item.high,
-					low: item.low,
-					close: item.close,
+		if (initialLineData.length === 0) {
+			data.forEach((data) => {
+				initialLineData.push({
+					time: moment.unix(`${data.time}`).format('YYYY-MM-DD'),
+					value: data.close,
+				});
+			});
+		}
+
+		if (initialCandleData.length === 0) {
+			data.forEach((data) => {
+				initialCandleData.push({
+					time: moment.unix(`${data.time}`).format('YYYY-MM-DD'),
+					open: data.open,
+					close: data.close,
+					low: data.low,
+					high: data.high,
 				});
 			});
 		}
@@ -48,7 +60,11 @@ function GetData() {
 
 	return (
 		<div className="">
-			<BitcoinChart chartData={bitcoinData} isCandleGraph={isCandleGraph} />
+			{isLineGraph.isLineGraph === true ? (
+				<BitcoinChart LineData={lineData} />
+			) : (
+				<CandleStick CandleData={candleData} />
+			)}
 		</div>
 	);
 }
